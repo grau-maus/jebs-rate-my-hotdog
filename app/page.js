@@ -1,12 +1,7 @@
-"use client";
-import React, { useState } from "react";
 import Image from "next/image";
-import { fileSizeToKBMB } from "./utils";
+import FileInput from "./components/FileInput";
 
 export default function Home() {
-  const [fileSize, setFileSize] = useState("0 KB");
-  const [fileError, setFileError] = useState("");
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-16">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -34,48 +29,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-
-      <div className="relative pb-40">
-        <label className="block mb-2" htmlFor="file_input">
-          Upload hotdog (2 MB max)
-        </label>
-        <input
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="file_input"
-          type="file"
-          onChange={(e) => {
-            if (e.target.files && e.target.files[0]) {
-              const currentFileSize = fileSizeToKBMB(e.target.files[0].size);
-              const isImageType = e.target.files[0].type.includes("image");
-              setFileSize(currentFileSize);
-              setFileError("");
-              if (!isImageType) {
-                setFileError(
-                  "What you're uploading is definitely not a hotdog. Please upload a hotdog."
-                );
-              } else if (
-                currentFileSize.includes("MB") &&
-                Number(currentFileSize.split(" ")[0]) > 2
-              ) {
-                setFileError(
-                  "Hotdog is too large! Please resize or upload a smaller hotdog."
-                );
-              }
-            }
-          }}
-        />
-        <p
-          className="mt-1 text-sm text-gray-500 dark:text-gray-300"
-          id="file_input_help"
-        >
-          {fileSize}
-        </p>
-        {fileError !== "" ? (
-          <span className="absolute font-mono text-sm text-red-500">
-            {fileError}
-          </span>
-        ) : null}
-      </div>
+      <FileInput />
     </main>
   );
 }
