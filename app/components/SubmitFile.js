@@ -1,5 +1,5 @@
 export default function SubmitFile(props) {
-  const { fileInput, APIKey, setIsLoading, setRating } = props;
+  const { fileInput, APIKey, setIsLoading, setRating, setAPIError } = props;
 
   return (
     <button
@@ -19,9 +19,14 @@ export default function SubmitFile(props) {
         })
           .then(async (res) => {
             const rating = await res.json();
-            console.log(rating);
             if (!rating.data.error && !rating.error) {
               setRating(rating.data);
+            } else {
+              setAPIError(
+                rating.data.error !== undefined
+                  ? rating.data.error
+                  : rating.error
+              );
             }
             setIsLoading(false);
           })

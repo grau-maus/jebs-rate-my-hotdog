@@ -9,6 +9,7 @@ export default function Home() {
   const [rating, setRating] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userFileInput, setUserFileInput] = useState({});
+  const [APIError, setAPIError] = useState("");
 
   return (
     <main className="flex min-h-screen flex-col items-center p-16">
@@ -44,6 +45,8 @@ export default function Home() {
           isLoading={isLoading}
           userFileInput={userFileInput}
           setUserFileInput={setUserFileInput}
+          APIError={APIError}
+          setAPIError={setAPIError}
         />
       ) : isLoading ? (
         <LoadingSVG text={"Rating hotdog"} />

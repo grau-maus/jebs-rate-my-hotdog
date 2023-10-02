@@ -4,12 +4,17 @@ import SubmitFile from "./SubmitFile";
 import { fileSizeToKBMB } from "../utils";
 
 export default function FileInput(props) {
-  const { setRating, setIsLoading, userFileInput, setUserFileInput } = props;
+  const {
+    setRating,
+    setIsLoading,
+    userFileInput,
+    setUserFileInput,
+    APIError,
+    setAPIError,
+  } = props;
   const [fileSize, setFileSize] = useState("0 KB");
   const [fileError, setFileError] = useState("");
   const [APIInput, setAPIInput] = useState("");
-
-  // *TO-DO* ERROR HANDLING FOR API KEY
 
   return (
     <div className="flex flex-col pt-40">
@@ -31,7 +36,11 @@ export default function FileInput(props) {
           id="api_input"
           type="password"
           onChange={(e) => {
+            setAPIError("");
             setAPIInput(e.target.value);
+            if (e.target.value.trim() === "" && fileError === "") {
+              setAPIError("astica API key required");
+            }
           }}
         />
       </div>
@@ -70,6 +79,9 @@ export default function FileInput(props) {
                 );
               } else {
                 setUserFileInput(e.target.files[0]);
+                if (!APIInput) {
+                  setAPIError("Missing astica API key");
+                }
               }
             }
           }}
@@ -80,9 +92,9 @@ export default function FileInput(props) {
         >
           {fileSize}
         </p>
-        {fileError !== "" ? (
+        {fileError !== "" || APIError !== "" ? (
           <span className="absolute font-mono text-sm text-red-500 top-28">
-            {fileError}
+            {fileError !== "" ? fileError : APIError}
           </span>
         ) : fileSize === "0 KB" ? null : (
           <SubmitFile
@@ -90,6 +102,7 @@ export default function FileInput(props) {
             APIKey={APIInput}
             setIsLoading={setIsLoading}
             setRating={setRating}
+            setAPIError={setAPIError}
           />
         )}
       </div>
